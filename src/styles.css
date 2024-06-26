@@ -10,3 +10,25 @@ html, body {
   font-family: sans-serif;
   text-align: center;
 }
+
+/*
+ * Classes for fade-in/fade-out animation of calendar panel.
+ * Used with CSSTransition component.
+ */
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

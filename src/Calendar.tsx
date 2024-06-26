@@ -1,6 +1,8 @@
-import React, { FC, useState, useEffect, useCallback } from "react";
+import React, { FC, useState, useEffect, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import moment from "moment";
 import clsx from "clsx";
+import { CSSTransition } from "react-transition-group";
 
 const weekDays: Record<string, string[]> = {
   FR: ["L", "M", "M", "J", "V", "S", "D"],
@@ -132,17 +134,14 @@ const DaysPanelContent: FC<DaysPanelContentProps> = ({
 
 // CALENDAR COMPONENT - component to be moved to Calendar.tsx
 
-interface CalendarProps {
-  /* Date as formatted string "YYYY-MM-DD" */
-  date?: string;
-  /* Locale language in international ISO-truc */
-  locale?: keyof typeof weekDays;
-  /* Called on date click */
-  onDateChange?: (date: string) => void;
+interface CalendarProps extends DaysPanelContentProps {
+  /* Will place the panel in a portal */
+  enablePortal?: boolean;
 }
 
 const Calendar: FC<CalendarProps> = ({ onDateChange }) => {
   const [date, setDate] = useState<string>(moment().format("YYYY-MM-DD"));
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
 
   const gotoNextMonth = useCallback(() => {
     setDate((prev) => {
@@ -176,19 +175,58 @@ const Calendar: FC<CalendarProps> = ({ onDateChange }) => {
     });
   }, []);
 
+  /**
+   * Function to handle toggling the visibility of the panel.
+   * @function
+   * @name handleTogglePanelVisibility
+   * @returns {void}
+   */
+  const handleTogglePanelVisibility = (): void =>
+    setIsCalendarVisible(!isCalendarVisible);
+
+  /**
+   * Handles the change of date.
+   *
+   * @param {string} date - The new date.
+   */
+  const handleDateChange = (date: string) => {
+    handleTogglePanelVisibility();
+    onDateChange?.(date);
+  };
+
   return (
-    <div className="flex flex-col gap-2 max-w-[400px] bg-white rounded-md shadow-lg">
-      <div className="flex gap-4 text-gray-600 justify-center p-3 border-b border-b-gray-200">
-        <button onClick={gotoPrevMonth} aria-label="Previous Month">
-          &lt;&lt;
-        </button>
-        <div className="font-bold">{moment(date).format("MMMM YYYY")}</div>
-        <button onClick={gotoNextMonth} aria-label="Next Month">
-          &gt;&gt;
-        </button>
-      </div>
-      <DaysPanelContent date={date} onDateChange={onDateChange} />
-    </div>
+    <>
+      <button
+        onClick={handleTogglePanelVisibility}
+        className="p-2 mt-2 bg-blue-600 text-white rounded"
+      >
+        Toggle Calendar
+      </button>
+      {createPortal(
+        <CSSTransition
+          in={isCalendarVisible}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <div className="flex flex-col gap-2 max-w-[400px] bg-white rounded-md shadow-lg">
+            <div className="flex gap-4 text-gray-600 justify-center p-3 border-b border-b-gray-200">
+              <button onClick={gotoPrevMonth} aria-label="Previous Month">
+                &lt;&lt;
+              </button>
+              <div className="font-bold">
+                {moment(date).format("MMMM YYYY")}
+              </div>
+              <button onClick={gotoNextMonth} aria-label="Next Month">
+                &gt;&gt;
+              </button>
+            </div>
+            <DaysPanelContent date={date} onDateChange={handleDateChange} />
+          </div>
+        </CSSTransition>,
+        document.body,
+      )}
+    </>
   );
 };
 
