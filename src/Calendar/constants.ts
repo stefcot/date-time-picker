@@ -4,3 +4,5 @@ export const WEEK_DAYS: Record<string, string[]> = {
 };
 
 export const DATE_FORMAT = "YYYY-MM-DD";
+
+export const FADE_ANIMATION_DURATION = 300;

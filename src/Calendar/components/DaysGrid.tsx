@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import moment from "moment";
 
-import { DATE_FORMAT, WEEK_DAYS } from "../constants";
+import { DATE_FORMAT } from "../constants";
 import { useCalendar } from "../context";
 
 import type { BasicCalendarProps } from "../types";
@@ -58,7 +58,7 @@ const DaysGrid: FC<BasicCalendarProps> = ({
 
   return (
     <div className="grid grid-cols-7 gap-y-3 p-3 h-full">
-      {WEEK_DAYS[locale].map((name: string, index: number) => (
+      {moment.weekdaysShort().map((name: string, index: number) => (
         <div key={`${name}-${index}`} className="flex justify-center">
           <span
             className={

@@ -15,8 +15,8 @@ export default function App() {
 
   return (
     <div className={clsx("App", "flex flex-col gap-4")}>
-      <Calendar date={date} onDateChange={handleDateChange} />
       <div className="font-bold">{date}</div>
+      <Calendar date={date} onDateChange={handleDateChange} />
     </div>
   );
 }

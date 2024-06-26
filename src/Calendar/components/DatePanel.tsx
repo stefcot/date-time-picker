@@ -6,17 +6,15 @@ import { DATE_FORMAT } from "../constants";
 import { useCalendar } from "../context";
 
 import DaysGrid from "./DaysGrid";
+import { CalendarMode } from "../types";
 
-export interface DatePanelContentProps {
+export interface DatePanelProps {
   className?: string;
   onDateChange?: (date: string) => void;
 }
 
-const DatePanelContent: FC<DatePanelContentProps> = ({
-  className,
-  onDateChange,
-}) => {
-  const { date } = useCalendar();
+const DatePanel: FC<DatePanelProps> = ({ className, onDateChange }) => {
+  const { date, setMode } = useCalendar();
   const [month, setMonth] = useState<string>(
     date ?? moment().format("YYYY-MM-DD"),
   );
@@ -83,8 +81,17 @@ const DatePanelContent: FC<DatePanelContentProps> = ({
         </button>
       </div>
       <DaysGrid date={month} onDateChange={onDateChange} />
+      <div className="p-4 border-t border-t-gray-200">
+        <button
+          aria-label={`Choose month`}
+          className="p-2 bg-blue-600 text-white rounded truncate"
+          onClick={() => setMode(CalendarMode.MONTHS)}
+        >
+          Choose month
+        </button>
+      </div>
     </div>
   );
 };
 
-export default DatePanelContent;
+export default DatePanel;

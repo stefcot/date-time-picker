@@ -1,10 +1,9 @@
 import React, { FC, useState } from "react";
-import { createPortal } from "react-dom";
-import { CSSTransition } from "react-transition-group";
 
 import { Panel } from "./components";
 
 import type { CalendarProps } from "./types";
+import { CalendarMode } from "./types";
 import { CalendarProvider } from "./context";
 
 // 1. a component panel to contains either date or time
