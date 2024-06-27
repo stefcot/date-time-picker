@@ -8,44 +8,44 @@ import { useCalendar } from "../context";
 import ArrowLeftIcon from "../assets/arrow-narrow-left.svg?react";
 import ArrowRightIcon from "../assets/arrow-narrow-right.svg?react";
 
-export interface MonthsPanelProps {
+export interface YearsPanelProps {
   className?: string;
   onDateChange?: (date: string) => void;
 }
 
-const MonthsPanel: FC<MonthsPanelProps> = ({ className, onDateChange }) => {
+const YearsPanel: FC<YearsPanelProps> = ({ className, onDateChange }) => {
   const { date } = useCalendar();
-  const [month, setMonth] = useState<string>(
+  const [year, setYear] = useState<string>(
     date ?? moment().format(DATE_FORMAT),
   );
 
   useEffect(() => {
-    setMonth(date ?? moment().format(DATE_FORMAT));
+    setYear(date ?? moment().format(DATE_FORMAT));
   }, [date]);
 
   /**
-   * Function to go to the previous year.
+   * Function to go to the previous years range.
    * It updates the date state using the `setDate` function.
    * The function uses `useCallback` to optimize performance.
    *
-   * @function gotoPrevYear
+   * @function gotoPrevYearsRange
    * @returns {void}
    */
-  const gotoPrevYear = useCallback(() => {
-    setMonth((prev) => {
-      return moment(prev).subtract(1, "years").format(DATE_FORMAT);
+  const gotoPrevYearsRange = useCallback(() => {
+    setYear((prev) => {
+      return moment(prev).subtract(12, "years").format(DATE_FORMAT);
     });
   }, []);
 
   /**
-   * A callback function that advances the date to the next year.
+   * A callback function that advances the date to the next years range.
    *
-   * @function gotoNextYear
+   * @function gotoNextYearsRange
    * @returns {void}
    */
-  const gotoNextYear = useCallback(() => {
-    setMonth((prev) => {
-      return moment(prev).add(1, "years").format(DATE_FORMAT);
+  const gotoNextYearsRange = useCallback(() => {
+    setYear((prev) => {
+      return moment(prev).add(12, "years").format(DATE_FORMAT);
     });
   }, []);
 
@@ -69,35 +69,38 @@ const MonthsPanel: FC<MonthsPanelProps> = ({ className, onDateChange }) => {
       <div className="flex gap-4 text-gray-600 justify-between px-6 py-3 border-b border-b-gray-200">
         <ArrowLeftIcon
           aria-hidden
-          aria-label="Previous Year"
+          aria-label="Previous 12 Years"
           className="w-[24px] fill-gray-800 cursor-pointer"
-          onClick={gotoPrevYear}
+          onClick={gotoPrevYearsRange}
         />
-        <div className="font-bold">{moment(month).format("YYYY")}</div>
+        <div className="flex font-bold gap-1">
+          <span>{moment(year).format("YYYY")}</span>-
+          <span>{moment(year).add(12, "years").format("YYYY")}</span>
+        </div>
         <ArrowRightIcon
           aria-hidden
-          aria-label="Next Year"
+          aria-label="Next 12 Years"
           className="w-[24px] fill-gray-800 cursor-pointer"
-          onClick={gotoNextYear}
+          onClick={gotoNextYearsRange}
         />
       </div>
       <div role="grid" className="grid grid-cols-3 gap-4 p-4">
-        {moment.months().map((monthName) => {
+        {Array.from({ length: 12 }, (_, i) => i).map((offset) => {
           return (
             <button
-              aria-label={`Choose ${monthName}`}
+              aria-label={`Choose ${moment(year).add(offset, "years").format("YYYY")}`}
               className={clsx(
                 "p-2 border border-gray-100 hover:border-blue-600 hover:bg-blue-600 hover:text-white rounded truncate transition duration-200 ease-in-out",
                 {
                   "border-blue-600 bg-blue-600 text-white":
-                    moment().month(monthName).format("MM") ===
-                    moment(date).format("MM"),
+                    moment(year).add(offset, "years").format("YYYY") ===
+                    moment(date).format("YYYY"),
                 },
               )}
-              data-date={`${month?.split("-")[0]}-${moment().month(monthName).format("MM")}-${month?.split("-")[2]}`}
+              data-date={`${moment(year).add(offset, "years").format("YYYY")}-${year?.split("-")[1]}-${year?.split("-")[2]}`}
               onClick={handleDateClick}
             >
-              {monthName}
+              {moment(year).add(offset, "years").format("YYYY")}
             </button>
           );
         })}
@@ -106,4 +109,4 @@ const MonthsPanel: FC<MonthsPanelProps> = ({ className, onDateChange }) => {
   );
 };
 
-export default MonthsPanel;
+export default YearsPanel;

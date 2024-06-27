@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { Panel } from "./components";
+import Panel from "./components/Panel";
 
 import { CalendarProvider } from "./context";
 
@@ -14,7 +14,7 @@ import type { CalendarProps } from "./types";
 // [X]  1a. Click away for panel
 // [ ]  1b. Have the choice between date & time when date picker mode
 // [X] 2. a component to display days in a month
-// [ ]  2a. a component for going backward/forward (months)
+// [-]  2a. a component for going backward/forward (months)
 // [X]  2b. draw a seven column grid based on week
 // [ ]  2c. keep necessary days for previous and next month
 // [X]  2d. get first month day, the week day of the first month day for the previous current and next month
@@ -41,26 +41,29 @@ const Calendar: FC<CalendarProps> = ({ onDateChange, date }) => {
   const closePanel = (): void => setIsOpen(false);
 
   /**
-   * Handles the change of date.
+   * Handles the change of date and closes the panel afterward.
    *
    * @param {string} date - The new date.
    */
-  const handleDateChange = (date: string) => {
+  const handleDateChangeAndClose = (date: string) => {
     handleTogglePanelVisibility();
     onDateChange?.(date);
   };
 
   return (
     <CalendarProvider date={date}>
-      <DateTimeInput
-        onDateChange={onDateChange}
-        onIconClick={handleTogglePanelVisibility}
-      />
-      <Panel
-        onDateChange={handleDateChange}
-        open={isOpen}
-        onClickOutside={closePanel}
-      />
+      <div className="relative w-[300px]">
+        <DateTimeInput
+          onDateChange={onDateChange}
+          onIconClick={handleTogglePanelVisibility}
+        />
+        <Panel
+          onDateChange={handleDateChangeAndClose}
+          onDateChangeOnly={onDateChange}
+          open={isOpen}
+          onClickOutside={closePanel}
+        />
+      </div>
     </CalendarProvider>
   );
 };

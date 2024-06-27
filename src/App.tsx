@@ -14,9 +14,11 @@ const App: FC = () => {
   };
 
   return (
-    <div className={clsx("App", "flex flex-col gap-4")}>
-      <div className="font-bold">{date}</div>
+    <div className={clsx("App", "flex gap-4")}>
       <Calendar date={date} onDateChange={handleDateChange} />
+      <div className="flex items-center p-3 font-bold bg-white/50 text-blue-900 rounded">
+        {date}
+      </div>
     </div>
   );
 };

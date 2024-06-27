@@ -117,34 +117,29 @@ const DateTimeInput: FC<DateTimeInputProps> = ({
   };
 
   return (
-    <div className="flex flex-col">
-      <label className="flex w-full text-center p-3" htmlFor="custom-input">
-        Date
-      </label>
-      <div className="flex flex-col relative">
-        <InputMask
-          mask={mask}
-          value={inputValue}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            let newInputValue = validateYearEN(e.target.value);
-            newInputValue = validateMonthEN(newInputValue);
-            newInputValue = validateDayEN(newInputValue);
+    <div className="flex flex-col relative">
+      <InputMask
+        mask={mask}
+        value={inputValue}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          let newInputValue = validateYearEN(e.target.value);
+          newInputValue = validateMonthEN(newInputValue);
+          newInputValue = validateDayEN(newInputValue);
 
-            setInputValue(newInputValue);
+          setInputValue(newInputValue);
 
-            if (moment(newInputValue).isValid()) {
-              setDate(newInputValue);
-              onDateChange?.(newInputValue);
-            }
-          }}
-        >
-          <input className="h-10 p-3 rounded bg-white hover:shadow-[0_0_0_2px_rgb(29,78,216,0.5)] focus:outline-none focus-visible:outline-none focus:shadow-[0_0_0_4px_rgb(29,78,216,0.5),0_0_0_2px_rgb(29,78,216)]" />
-        </InputMask>
-        <CalendarIcon
-          onClick={onIconClick}
-          className="absolute w-[24px] top-1/2 -translate-y-[50%] right-3 fill-blue-700 cursor-pointer"
-        />
-      </div>
+          if (moment(newInputValue).isValid()) {
+            setDate(newInputValue);
+            onDateChange?.(newInputValue);
+          }
+        }}
+      >
+        <input className="h-12 p-4 rounded bg-white shadow-[0_0_0_1px_rgb(204,204,204)] transition hover:shadow-[0_0_0_2px_rgb(29,78,216,0.5)] focus:outline-none focus-visible:outline-none focus:shadow-[0_0_0_4px_rgb(29,78,216,0.5),0_0_0_2px_rgb(29,78,216)]" />
+      </InputMask>
+      <CalendarIcon
+        onClick={onIconClick}
+        className="absolute w-[24px] top-1/2 -translate-y-[50%] right-3 fill-blue-700 cursor-pointer"
+      />
     </div>
   );
 };
