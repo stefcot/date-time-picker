@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import { FC, memo } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 

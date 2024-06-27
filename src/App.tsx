@@ -1,12 +1,12 @@
 import "./styles.css";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import moment from "moment";
 import clsx from "clsx";
 
 import Calendar from "./Calendar";
 
-export default function App() {
+const App: FC = () => {
   const [date, setDate] = useState<string>();
 
   const handleDateChange = (date: string) => {
@@ -19,4 +19,6 @@ export default function App() {
       <Calendar date={date} onDateChange={handleDateChange} />
     </div>
   );
-}
+};
+
+export default App;
