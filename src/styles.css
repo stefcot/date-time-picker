@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html, body {
-  @apply min-h-screen w-screen overflow-y-auto bg-amber-200 p-3;
+  @apply min-h-screen w-screen overflow-y-auto bg-blue-200 p-3;
 }
 
 .App {

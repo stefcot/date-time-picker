@@ -2,24 +2,31 @@ import React, { FC, useState } from "react";
 
 import { Panel } from "./components";
 
-import type { CalendarProps } from "./types";
-import { CalendarMode } from "./types";
 import { CalendarProvider } from "./context";
 
-// 1. a component panel to contains either date or time
-//  1a. Click away for panel
-// 2. a component to display days in a month
-//  2a. a component for going backward/forward (months)
-//  2b. draw a seven column grid based on week
-//  2c. keep necessary days for previous and next month
-//  2d. get first month day, the week day of the first month day for the previous current and next month
-// 3. assign click event for days of the currently selected month of the currently selected year
-// 4. a component to display and edit datetime value (use an input mask)
-// 5. an onChange handler to emit the value
-// 6. have the component being controlled (display the value properly if passed)
-//  6a. have some locale labels and input masks (FR, EN)
-//  6a. type a masked value and populate state and children components
-// 7. Fill in the masked input when selecting values with the children components
+import DateTimeInput from "./components/DateTimeInput";
+
+import type { CalendarProps } from "./types";
+
+// IMPORTANT: BASED ON ENGLISH LANGUAGE
+
+// [ ] 1. a component panel to contains either date or time
+// [X]  1a. Click away for panel
+// [ ]  1b. Have the choice between date & time when date picker mode
+// [X] 2. a component to display days in a month
+// [ ]  2a. a component for going backward/forward (months)
+// [X]  2b. draw a seven column grid based on week
+// [ ]  2c. keep necessary days for previous and next month
+// [X]  2d. get first month day, the week day of the first month day for the previous current and next month
+// [X] 3. assign click event for days of the currently selected month of the currently selected year
+// [ ] 4. a component to display and edit datetime value (use an input mask)
+// [X] 5. an onChange handler to emit the value
+// [X] 6. have the component being controlled (display the value properly if passed)
+// [ ]  6a. have some locale labels and input masks (FR, EN)
+// [X]  6b. type a masked value and populate state and children components
+// [X] 7. Fill in the masked input when selecting values with the children components
+// [X]  7a. validate and correct user input while typing (years, months, days according to months)
+// [ ] 8. Manage panel placement according to the position of the input field in the viewport
 
 const Calendar: FC<CalendarProps> = ({ onDateChange, date }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +37,8 @@ const Calendar: FC<CalendarProps> = ({ onDateChange, date }) => {
    * @returns {void}
    */
   const handleTogglePanelVisibility = (): void => setIsOpen(!isOpen);
+
+  const closePanel = (): void => setIsOpen(false);
 
   /**
    * Handles the change of date.
@@ -43,13 +52,15 @@ const Calendar: FC<CalendarProps> = ({ onDateChange, date }) => {
 
   return (
     <CalendarProvider date={date}>
-      <button
-        onClick={handleTogglePanelVisibility}
-        className="p-2 mt-2 bg-blue-600 text-white rounded"
-      >
-        Toggle Calendar
-      </button>
-      <Panel onDateChange={handleDateChange} open={isOpen} />
+      <DateTimeInput
+        onDateChange={onDateChange}
+        onIconClick={handleTogglePanelVisibility}
+      />
+      <Panel
+        onDateChange={handleDateChange}
+        open={isOpen}
+        onClickOutside={closePanel}
+      />
     </CalendarProvider>
   );
 };

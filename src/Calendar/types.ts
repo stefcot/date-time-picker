@@ -36,7 +36,7 @@ export interface CalendarCtx extends CalendarProviderProps {
   /* Setter for the date (provider state) */
   setDate: Dispatch<SetStateAction<string>>;
   /* View mode for the calendar panel */
-  mode: CalendarMode;
+  calendarMode: CalendarMode;
   /* Setter for the panel view mode (provider state) */
-  setMode: Dispatch<SetStateAction<CalendarMode>>;
+  setCalendarMode: Dispatch<SetStateAction<CalendarMode>>;
 }

@@ -8,7 +8,7 @@ import moment from "moment";
  *
  * @returns {string} - The format of the given date string, or "Unknown format" if no format matches.
  */
-export const getDateFormat = (dateString: string): string => {
+export const getDateFormat = (dateString?: string): string => {
   const formats = [
     "dddd, MMMM Do YYYY",
     "dddd, MMMM D YYYY",

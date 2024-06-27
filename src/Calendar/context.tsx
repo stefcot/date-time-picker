@@ -17,18 +17,19 @@ import type { CalendarCtx, CalendarProviderProps } from "./types";
 const CalendarContext = createContext<CalendarCtx>({
   date: moment().format(DATE_FORMAT),
   setDate: () => {},
-  mode: CalendarMode.DAYS,
-  setMode: () => {},
+  calendarMode: CalendarMode.DAYS,
+  setCalendarMode: () => {},
 });
 
 const CalendarProvider: FC<PropsWithChildren<CalendarProviderProps>> = ({
   children,
   date: p_date,
 }) => {
-  const [mode, setMode] = useState(CalendarMode.DAYS);
+  const [calendarMode, setCalendarMode] = useState(CalendarMode.DAYS);
   const [date, setDate] = useState<string>(
     typeof p_date === "undefined" ? moment().format("YYYY-MM-DD") : p_date,
   );
+  console.log("CalendarProvider::render - date: ", date);
 
   /**
    * Will Reformat the date to meet a shape of "YYYY-MM-DD", if defined
@@ -45,12 +46,12 @@ const CalendarProvider: FC<PropsWithChildren<CalendarProviderProps>> = ({
 
   const value = useMemo<CalendarCtx>(() => {
     return {
-      mode,
+      calendarMode,
       date: formatDate(p_date) ?? formatDate(date),
       setDate,
-      setMode,
+      setCalendarMode,
     };
-  }, [mode, p_date, date]);
+  }, [calendarMode, p_date, date]);
 
   return (
     <CalendarContext.Provider value={value}>

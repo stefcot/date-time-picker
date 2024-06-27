@@ -7,11 +7,7 @@ import { useCalendar } from "../context";
 
 import type { BasicCalendarProps } from "../types";
 
-const DaysGrid: FC<BasicCalendarProps> = ({
-  date,
-  locale = "FR",
-  onDateChange,
-}) => {
+const DaysGrid: FC<BasicCalendarProps> = ({ date, onDateChange }) => {
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);
   const [arrayOfDates, setArrayOfDates] = useState<string[]>([]);
@@ -84,14 +80,14 @@ const DaysGrid: FC<BasicCalendarProps> = ({
             onKeyDown={handleKeyDown}
             className={clsx(
               "flex items-center justify-center text-gray-800 transition duration-500 h-9 w-9 rounded",
-              "focus:outline-none focus-visible:outline-amber-200 hover:bg-amber-200",
+              "focus:outline-none focus-visible:outline-blue-200 hover:bg-blue-200",
               {
-                "font-bold bg-amber-400 hover:bg-amber-700 hover:text-amber-100":
+                "font-bold text-white bg-blue-400 hover:bg-blue-700 hover:text-blue-100":
                   moment().format(DATE_FORMAT) ===
                   moment(value).format(DATE_FORMAT),
               },
               {
-                "font-bold bg-amber-200 hover:bg-amber-700 hover:text-amber-100":
+                "font-bold bg-blue-200 hover:bg-blue-700 hover:text-blue-100":
                   selectedDate === moment(value).format(DATE_FORMAT),
               },
             )}

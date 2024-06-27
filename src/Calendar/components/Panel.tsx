@@ -3,17 +3,22 @@ import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
 import { useCalendar } from "../context";
+import { FADE_ANIMATION_DURATION } from "../constants";
 
+import ClickAwayListener from "./ClickAwayListener";
 import DatePanel from "./DatePanel";
 import MonthsPanel from "./MonthsPanel";
 
 import { CalendarMode } from "../types";
 
 import type { CalendarProps } from "../types";
-import { FADE_ANIMATION_DURATION } from "../constants";
 
-const Panel: FC<CalendarProps> = ({ onDateChange, open }) => {
-  const { mode, setMode } = useCalendar();
+interface PanelProps extends CalendarProps {
+  onClickOutside: () => void;
+}
+
+const Panel: FC<PanelProps> = ({ onDateChange, open, onClickOutside }) => {
+  const { calendarMode, setCalendarMode } = useCalendar();
 
   return (
     <>
@@ -25,19 +30,23 @@ const Panel: FC<CalendarProps> = ({ onDateChange, open }) => {
           unmountOnExit
         >
           <div className="flex flex-col gap-2 max-w-[400px] bg-white rounded-md shadow-lg">
-            {mode === CalendarMode.DAYS && (
-              <DatePanel onDateChange={onDateChange} />
+            {calendarMode === CalendarMode.DAYS && (
+              <ClickAwayListener onClickAway={onClickOutside}>
+                <DatePanel onDateChange={onDateChange} />
+              </ClickAwayListener>
             )}
-            {mode === CalendarMode.MONTHS && (
-              <MonthsPanel
-                onDateChange={(e) => {
-                  setTimeout(
-                    () => setMode(CalendarMode.DAYS),
-                    FADE_ANIMATION_DURATION,
-                  );
-                  onDateChange?.(e);
-                }}
-              />
+            {calendarMode === CalendarMode.MONTHS && (
+              <ClickAwayListener onClickAway={onClickOutside}>
+                <MonthsPanel
+                  onDateChange={(e) => {
+                    setTimeout(
+                      () => setCalendarMode(CalendarMode.DAYS),
+                      FADE_ANIMATION_DURATION,
+                    );
+                    onDateChange?.(e);
+                  }}
+                />
+              </ClickAwayListener>
             )}
           </div>
         </CSSTransition>,

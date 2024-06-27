@@ -14,7 +14,7 @@ export interface DatePanelProps {
 }
 
 const DatePanel: FC<DatePanelProps> = ({ className, onDateChange }) => {
-  const { date, setMode } = useCalendar();
+  const { date, setCalendarMode } = useCalendar();
   const [month, setMonth] = useState<string>(
     date ?? moment().format("YYYY-MM-DD"),
   );
@@ -85,7 +85,7 @@ const DatePanel: FC<DatePanelProps> = ({ className, onDateChange }) => {
         <button
           aria-label={`Choose month`}
           className="p-2 bg-blue-600 text-white rounded truncate"
-          onClick={() => setMode(CalendarMode.MONTHS)}
+          onClick={() => setCalendarMode(CalendarMode.MONTHS)}
         >
           Choose month
         </button>
